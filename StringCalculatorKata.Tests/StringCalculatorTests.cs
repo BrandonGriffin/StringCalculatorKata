@@ -57,5 +57,13 @@ namespace StringCalculatorKata.Tests
 
             Assert.That(actual, Is.EqualTo(16));
         }
+
+        [Test]
+        public void AllowForNewDelimitersToBeEntered()
+        {
+            var actual = calculator.Calculate("//;\n1;2");
+
+            Assert.That(actual, Is.EqualTo(3));
+        }
     }
 }
