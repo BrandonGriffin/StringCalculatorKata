@@ -27,11 +27,19 @@ namespace StringCalculatorKata.Tests
         }
 
         [Test]
-        public void ASingleDigitShouldReturnItself()
+        public void ASingleNumberShouldReturnItself()
         {
             var actual = calculator.Calculate("1");
 
             Assert.That(actual, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void TwoNumbersShouldReturnTheirSum()
+        {
+            var actual = calculator.Calculate("2, 4");
+
+            Assert.That(actual, Is.EqualTo(6));
         }
     }
 }

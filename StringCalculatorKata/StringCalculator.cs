@@ -12,8 +12,17 @@ namespace StringCalculatorKata
         {
             if (input.Trim() == "")
                 return 0;
-            else
+
+            try
+            {
+                var strings = input.Split(',');
+                int[] numbers = strings.Select(x => int.Parse(x)).ToArray();
+                return numbers[0] + numbers[1];
+            }
+            catch
+            {
                 return Convert.ToInt32(input.Trim());
+            }            
         }
     }
 }
