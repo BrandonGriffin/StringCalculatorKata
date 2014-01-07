@@ -8,9 +8,9 @@ namespace StringCalculatorKata
 {
     public class StringCalculator
     {
-        public object Calculate(string p)
+        public Int32 Calculate(String input)
         {
-            throw new NotImplementedException();
+            return 0;
         }
     }
 }
