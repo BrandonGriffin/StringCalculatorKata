@@ -41,5 +41,13 @@ namespace StringCalculatorKata.Tests
 
             Assert.That(actual, Is.EqualTo(6));
         }
+
+        [Test]
+        public void AnyAmountOfNumbersShouldReturnTheirSum()
+        {
+            var actual = calculator.Calculate("3, 1, 5, 7");
+
+            Assert.That(actual, Is.EqualTo(16));
+        }
     }
 }

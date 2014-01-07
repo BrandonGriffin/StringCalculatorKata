@@ -16,7 +16,7 @@ namespace StringCalculatorKata
             try
             {
                 var strings = input.Split(',');
-                int[] numbers = strings.Select(x => int.Parse(x)).ToArray();
+                Int32[] numbers = strings.Select(x => Int32.Parse(x)).ToArray();
                 return numbers[0] + numbers[1];
             }
             catch
