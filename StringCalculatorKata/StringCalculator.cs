@@ -10,19 +10,36 @@ namespace StringCalculatorKata
     {
         public Int32 Calculate(String input)
         {
-            if (input.Trim() == "")
+            if (IsEmptyString(input))
                 return 0;
 
             try
             {
-                var strings = input.Split(',');
-                Int32[] numbers = strings.Select(x => Int32.Parse(x)).ToArray();
-                return numbers[0] + numbers[1];
+                var strings = input.Split(','); 
+                var sum = 0;
+                Int32[] numbers = ConvertStringsToIntArray(strings);
+
+                for (var i = 0; i < numbers.Length; i++)
+                {
+                    sum += numbers[i];
+                }
+
+                return sum;
             }
             catch
             {
                 return Convert.ToInt32(input.Trim());
             }            
+        }
+
+        private static Int32[] ConvertStringsToIntArray(String[] strings)
+        {
+            return strings.Select(x => Int32.Parse(x)).ToArray();
+        }
+
+        private static Boolean IsEmptyString(String input)
+        {
+            return input.Trim() == String.Empty;
         }
     }
 }

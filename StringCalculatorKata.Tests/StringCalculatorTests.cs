@@ -21,7 +21,7 @@ namespace StringCalculatorKata.Tests
         [Test]
         public void EmptyStringReturns0()
         {
-            var actual = calculator.Calculate("");
+            var actual = calculator.Calculate(String.Empty);
 
             Assert.That(actual, Is.EqualTo(0));
         }
