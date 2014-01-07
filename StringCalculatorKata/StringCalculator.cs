@@ -15,7 +15,8 @@ namespace StringCalculatorKata
 
             try
             {
-                var strings = input.Split(','); 
+                var delimiters = new Char[] {'\n', ','};
+                var strings = input.Split(delimiters); 
                 var sum = 0;
                 Int32[] numbers = ConvertStringsToIntArray(strings);
 

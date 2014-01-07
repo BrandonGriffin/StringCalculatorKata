@@ -49,5 +49,13 @@ namespace StringCalculatorKata.Tests
 
             Assert.That(actual, Is.EqualTo(16));
         }
+
+        [Test]
+        public void LineBreaksShouldBeTreatedAsADelimiter()
+        {
+            var actual = calculator.Calculate("3\n1, 5, 7");
+
+            Assert.That(actual, Is.EqualTo(16));
+        }
     }
 }
