@@ -21,10 +21,8 @@ namespace StringCalculatorKata
                 Int32[] numbers = ConvertStringsToIntArray(strings);
 
                 for (var i = 0; i < numbers.Length; i++)
-                {
                     sum += numbers[i];
-                }
-
+                
                 return sum;
             }
             catch
