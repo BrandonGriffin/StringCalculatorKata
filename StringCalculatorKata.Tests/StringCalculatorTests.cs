@@ -10,14 +10,28 @@ namespace StringCalculatorKata.Tests
     [TestFixture]
     public class StringCalculatorTests
     {
+        private StringCalculator calculator;
+
+        [SetUp]
+        public void SetUp()
+        {
+            calculator = new StringCalculator();
+        }
+
         [Test]
         public void EmptyStringReturns0()
         {
-            var calculator = new StringCalculator();
-            
             var actual = calculator.Calculate("");
 
             Assert.That(actual, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void ASingleDigitShouldReturnItself()
+        {
+            var actual = calculator.Calculate("1");
+
+            Assert.That(actual, Is.EqualTo(1));
         }
     }
 }
