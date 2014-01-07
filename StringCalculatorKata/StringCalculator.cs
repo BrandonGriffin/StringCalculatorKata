@@ -10,7 +10,10 @@ namespace StringCalculatorKata
     {
         public Int32 Calculate(String input)
         {
-            return 0;
+            if (input.Trim() == "")
+                return 0;
+            else
+                return Convert.ToInt32(input.Trim());
         }
     }
 }
