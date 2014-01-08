@@ -39,13 +39,19 @@ namespace StringCalculatorKata
                     hasANegative = true;
                 }
 
-                sum += numbers[i];
+                if (NumberIsNotOver1000(numbers, i))
+                    sum += numbers[i];
             }
             
             if(hasANegative)
                 throw new System.NegativesNotAllowedException(negativesExceptionMessage);
             
             return sum; 
+        }
+
+        private static Boolean NumberIsNotOver1000(Int32[] numbers, Int32 i)
+        {
+            return numbers[i] <= 1000;
         }
 
         private static Boolean IsANegativeNumber(Int32[] numbers, Int32 i)

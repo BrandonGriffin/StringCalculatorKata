@@ -80,5 +80,12 @@ namespace StringCalculatorKata.Tests
         {
             var actual = calculator.Calculate("-2, 3, 1, -4");
         }
+
+        [Test]
+        public void NumbersBiggerThan1000ShouldBeIgnored()
+        {
+            var actual = calculator.Calculate("2, 1001, 1");
+            Assert.That(actual, Is.EqualTo(3));
+        }
     }
 }
