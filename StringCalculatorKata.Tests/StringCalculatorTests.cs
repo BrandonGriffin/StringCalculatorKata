@@ -66,5 +66,12 @@ namespace StringCalculatorKata.Tests
         {
             var actual = calculator.Calculate("-2, 3");
         }
+
+        [Test]
+        [ExpectedException(typeof(NegativesNotAllowedException), ExpectedMessage = "Negatives not allowed: -2")]
+        public void NegativesNotAllowedSendsTheCorrectError()
+        {
+            var actual = calculator.Calculate("-2, 3");
+        }
     }
 }
