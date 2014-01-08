@@ -33,7 +33,7 @@ namespace StringCalculatorKata
             for (var i = 0; i < numbers.Length; i++)
             {
                 if (numbers[i] < 0)
-                    throw new System.NegativesNotAllowedException();
+                    throw new System.NegativesNotAllowedException("Negatives not allowed: " + numbers[i]);
 
                 sum += numbers[i];
             }
