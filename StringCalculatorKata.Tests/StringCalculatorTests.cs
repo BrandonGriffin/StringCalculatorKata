@@ -22,7 +22,6 @@ namespace StringCalculatorKata.Tests
         public void EmptyStringReturns0()
         {
             var actual = calculator.Calculate(String.Empty);
-
             Assert.That(actual, Is.EqualTo(0));
         }
 
@@ -30,7 +29,6 @@ namespace StringCalculatorKata.Tests
         public void ASingleNumberShouldReturnItself()
         {
             var actual = calculator.Calculate("1");
-
             Assert.That(actual, Is.EqualTo(1));
         }
 
@@ -38,7 +36,6 @@ namespace StringCalculatorKata.Tests
         public void TwoNumbersShouldReturnTheirSum()
         {
             var actual = calculator.Calculate("2, 4");
-
             Assert.That(actual, Is.EqualTo(6));
         }
 
@@ -46,7 +43,6 @@ namespace StringCalculatorKata.Tests
         public void AnyAmountOfNumbersShouldReturnTheirSum()
         {
             var actual = calculator.Calculate("3, 1, 5, 7");
-
             Assert.That(actual, Is.EqualTo(16));
         }
 
@@ -54,7 +50,6 @@ namespace StringCalculatorKata.Tests
         public void LineBreaksShouldBeTreatedAsADelimiter()
         {
             var actual = calculator.Calculate("3\n1, 5, 7");
-
             Assert.That(actual, Is.EqualTo(16));
         }
 
@@ -62,8 +57,14 @@ namespace StringCalculatorKata.Tests
         public void AllowForNewDelimitersToBeEntered()
         {
             var actual = calculator.Calculate("//;\n1;2");
-
             Assert.That(actual, Is.EqualTo(3));
+        }
+
+        [Test]
+        [ExpectedException(typeof(NegativesNotAllowedException))]
+        public void NegativesShouldNotBeAllowed()
+        {
+            var actual = calculator.Calculate("-2, 3");
         }
     }
 }

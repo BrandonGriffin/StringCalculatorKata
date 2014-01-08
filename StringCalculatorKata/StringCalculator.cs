@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,30 +14,30 @@ namespace StringCalculatorKata
             if (IsEmptyString(input))
                 return 0;
 
-            try
-            {
-                var delimiters = new Char[] { '\n', ',' };
-
-                if (HasANewDelimiter(input))
-                {
-                    var charsToRemove = new Char[] { '/', '\n', input[2] };
-                    delimiters[1] = input[2];
-                    input = input.Trim(charsToRemove);
-                }
-
-                var strings = input.Split(delimiters); 
-                var sum = 0;
-                Int32[] numbers = ConvertStringsToIntArray(strings);
-
-                for (var i = 0; i < numbers.Length; i++)
-                    sum += numbers[i];
+            var delimiters = new Char[] { '\n', ',' };
+            var sum = 0;
                 
-                return sum;
-            }
-            catch
+            if (HasANewDelimiter(input))
             {
-                return Convert.ToInt32(input.Trim());
-            }            
+                var charsToRemove = new Char[] { '/', '\n', input[2] };
+                delimiters[1] = input[2];
+                input = input.Trim(charsToRemove);
+            }
+
+            var strings = input.Split(delimiters); 
+            var numbers = ConvertStringsToIntArray(strings);
+
+            if (numbers.Count() == 1)
+                return numbers.First();
+
+            for (var i = 0; i < numbers.Length; i++)
+            {
+                if (numbers[i] < 0)
+                    throw new System.NegativesNotAllowedException();
+
+                sum += numbers[i];
+            }
+            return sum; 
         }
 
         private static Boolean HasANewDelimiter(String input)
