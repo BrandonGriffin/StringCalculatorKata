@@ -16,28 +16,57 @@ namespace StringCalculatorKata
 
             var delimiters = new Char[] { '\n', ',' };
             var sum = 0;
-                
+            var hasANegative = false;
+            var negativesExceptionMessage = "Negatives not allowed: ";
+
+            input = ChangeDelimiter(input, delimiters);
+
+            var strings = input.Split(delimiters); 
+            var numbers = ConvertStringsToIntArray(strings);
+
+            if (IsASingleNumber(numbers))
+                return numbers.First();
+
+            for (var i = 0; i < numbers.Length; i++)
+            {
+                if (IsANegativeNumber(numbers, i))
+                {
+                    if (hasANegative)
+                        negativesExceptionMessage += ", " + numbers[i];
+                    else
+                        negativesExceptionMessage += numbers[i];
+
+                    hasANegative = true;
+                }
+
+                sum += numbers[i];
+            }
+            
+            if(hasANegative)
+                throw new System.NegativesNotAllowedException(negativesExceptionMessage);
+            
+            return sum; 
+        }
+
+        private static Boolean IsANegativeNumber(Int32[] numbers, Int32 i)
+        {
+            return numbers[i] < 0;
+        }
+
+        private static String ChangeDelimiter(String input, Char[] delimiters)
+        {
             if (HasANewDelimiter(input))
             {
                 var charsToRemove = new Char[] { '/', '\n', input[2] };
                 delimiters[1] = input[2];
                 input = input.Trim(charsToRemove);
             }
+            return input;
+        }
 
-            var strings = input.Split(delimiters); 
-            var numbers = ConvertStringsToIntArray(strings);
-
-            if (numbers.Count() == 1)
-                return numbers.First();
-
-            for (var i = 0; i < numbers.Length; i++)
-            {
-                if (numbers[i] < 0)
-                    throw new System.NegativesNotAllowedException("Negatives not allowed: " + numbers[i]);
-
-                sum += numbers[i];
-            }
-            return sum; 
+        private static Boolean IsASingleNumber(Int32[] numbers)
+        {
+            return numbers.Count() == 1;
         }
 
         private static Boolean HasANewDelimiter(String input)

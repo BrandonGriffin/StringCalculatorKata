@@ -73,5 +73,12 @@ namespace StringCalculatorKata.Tests
         {
             var actual = calculator.Calculate("-2, 3");
         }
+
+        [Test]
+        [ExpectedException(typeof(NegativesNotAllowedException), ExpectedMessage = "Negatives not allowed: -2, -4")]
+        public void NegativesNotAllowedSendsAllNegativesInTheError()
+        {
+            var actual = calculator.Calculate("-2, 3, 1, -4");
+        }
     }
 }
