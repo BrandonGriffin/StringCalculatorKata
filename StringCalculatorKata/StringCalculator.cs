@@ -15,7 +15,15 @@ namespace StringCalculatorKata
 
             try
             {
-                var delimiters = new Char[] {'\n', ','};
+                var delimiters = new Char[] { '\n', ',' };
+
+                if (HasANewDelimiter(input))
+                {
+                    var charsToRemove = new Char[] { '/', '\n', input[2] };
+                    delimiters[1] = input[2];
+                    input = input.Trim(charsToRemove);
+                }
+
                 var strings = input.Split(delimiters); 
                 var sum = 0;
                 Int32[] numbers = ConvertStringsToIntArray(strings);
@@ -29,6 +37,11 @@ namespace StringCalculatorKata
             {
                 return Convert.ToInt32(input.Trim());
             }            
+        }
+
+        private static Boolean HasANewDelimiter(String input)
+        {
+            return input[0] == '/';
         }
 
         private static Int32[] ConvertStringsToIntArray(String[] strings)
