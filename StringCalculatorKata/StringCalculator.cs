@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StringCalculatorKata
 {
@@ -74,18 +70,21 @@ namespace StringCalculatorKata
                         if (IsAMultipleCharacterDelimiter(input, newDelimiter, i))
                             delimiterString += input[i];
                         else
-                        {
-                            Array.Resize<String>(ref delimiters, delimiters.Length + 1);
-                            delimiters[delimiters.Length - 1] = delimiterString;
-                            delimiterString = String.Empty;
-                        }
+                            AddDelimiterToArray(ref delimiters, ref delimiterString);
                     }  
                 }
 
                 input = TrimInput(input, newDelimiter); 
             }
 
-            return input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries); ;
+            return input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        private static void AddDelimiterToArray(ref String[] delimiters, ref String delimiterString)
+        {
+            Array.Resize<String>(ref delimiters, delimiters.Length + 1);
+            delimiters[delimiters.Length - 1] = delimiterString;
+            delimiterString = String.Empty;
         }
 
         private static bool IsTheNewDelimiter(String input, Int32 i)
