@@ -87,5 +87,19 @@ namespace StringCalculatorKata.Tests
             var actual = calculator.Calculate("2, 1001, 1");
             Assert.That(actual, Is.EqualTo(3));
         }
+
+        [Test]
+        public void DelimitersCanBeOfAnyLength()
+        {
+            var actual = calculator.Calculate("//[***]\n2***3***1");
+            Assert.That(actual, Is.EqualTo(6));
+        }
+
+        [Test]
+        public void AllowForMultipleDelimiters()
+        {
+            var actual = calculator.Calculate("//[*][%]\n1*2%3");
+            Assert.That(actual, Is.EqualTo(6));
+        }
     }
 }

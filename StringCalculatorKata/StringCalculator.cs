@@ -14,18 +14,16 @@ namespace StringCalculatorKata
             if (IsEmptyString(input))
                 return 0;
 
-            var delimiters = new Char[] { '\n', ',' };
+            var delimiterString = String.Empty;
+            var delimiters = new String[] { "\n", "," };
             var sum = 0;
             var hasANegative = false;
             var negativesExceptionMessage = "Negatives not allowed: ";
 
-            input = ChangeDelimiter(input, delimiters);
+            input = ChangeDelimiter(input, delimiters, delimiterString);
 
-            var strings = input.Split(delimiters); 
+            var strings = input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries); 
             var numbers = ConvertStringsToIntArray(strings);
-
-            if (IsASingleNumber(numbers))
-                return numbers.First();
 
             for (var i = 0; i < numbers.Length; i++)
             {
@@ -43,9 +41,12 @@ namespace StringCalculatorKata
                     sum += numbers[i];
             }
             
-            if(hasANegative)
+            if (hasANegative)
                 throw new System.NegativesNotAllowedException(negativesExceptionMessage);
-            
+
+            if (IsASingleNumber(numbers))
+                return numbers.First();
+
             return sum; 
         }
 
@@ -59,14 +60,48 @@ namespace StringCalculatorKata
             return numbers[i] < 0;
         }
 
-        private static String ChangeDelimiter(String input, Char[] delimiters)
+        private static String ChangeDelimiter(String input, String[] delimiters, String delimiterString)
         {
             if (HasANewDelimiter(input))
             {
-                var charsToRemove = new Char[] { '/', '\n', input[2] };
-                delimiters[1] = input[2];
-                input = input.Trim(charsToRemove);
+                var newDelimiter = ',';
+                for (int i = 2; i < input.Length; i++)
+                {
+                    if (input[i] != '[')
+                    {
+                        if (IsTheNewDelimiter(input, i))
+                            newDelimiter = input[i];
+
+                        if (IsAMultipleCharacterDelimiter(input, newDelimiter, i))
+                            delimiterString += input[i];
+                        else
+                        {
+                            delimiters[1] = delimiterString;
+                            break;
+                        }
+                    }  
+                }
+
+                input = TrimInput(input, newDelimiter);
             }
+            
+            return input;
+        }
+
+        private static bool IsTheNewDelimiter(String input, int i)
+        {
+            return i == 2 || input[i - 1] == '[';
+        }
+
+        private static bool IsAMultipleCharacterDelimiter(String input, char newDelimiter, int i)
+        {
+            return input[i] == newDelimiter;
+        }
+
+        private static String TrimInput(String input, char newDelimiter)
+        {
+            var charsToRemove = new Char[] { '/', '\n', '[', ']', input[3], newDelimiter };
+            input = input.Trim(charsToRemove);
             return input;
         }
 
