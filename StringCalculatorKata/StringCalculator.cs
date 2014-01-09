@@ -79,9 +79,9 @@ namespace StringCalculatorKata
                             delimiters[delimiters.Length - 1] = delimiterString;
                             delimiterString = String.Empty;
                         }
-                    }
-                    
+                    }  
                 }
+
                 input = TrimInput(input, newDelimiter); 
             }
 

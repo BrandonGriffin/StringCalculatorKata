@@ -101,5 +101,12 @@ namespace StringCalculatorKata.Tests
             var actual = calculator.Calculate("//[*][%]\n1*2%3");
             Assert.That(actual, Is.EqualTo(6));
         }
+
+        [Test]
+        public void AllowMultipleDelimitersOfAnyLengthy()
+        {
+            var actual = calculator.Calculate("//[**][%%%]\n1**2%%%3");
+            Assert.That(actual, Is.EqualTo(6));
+        }
     }
 }
