@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace StringCalculatorKata
@@ -7,53 +8,45 @@ namespace StringCalculatorKata
     {
         public Int32 Calculate(String input)
         {
-            if (IsEmptyString(input))
+            if (String.IsNullOrWhiteSpace(input))
                 return 0;
 
-            var delimiters = new String[] { "\n", "," };
+            var delimiters = new List<String> { "\n", "," };
             var sum = 0;
-            var hasANegative = false;
-            var negativesExceptionMessage = "Negatives not allowed: ";
-
-            var strings = ChangeDelimiter(input, delimiters);
-            var numbers = ConvertStringsToIntArray(strings);
-
-            for (var i = 0; i < numbers.Length; i++)
-            {
-                if (IsANegativeNumber(numbers, i))
-                {
-                    if (hasANegative)
-                        negativesExceptionMessage += ", " + numbers[i];
-                    else
-                        negativesExceptionMessage += numbers[i];
-
-                    hasANegative = true;
-                }
-
-                if (NumberIsNotOver1000(numbers, i))
-                    sum += numbers[i];
-            }
+            var negatives = new List<Int32>();
             
-            if (hasANegative)
-                throw new System.NegativesNotAllowedException(negativesExceptionMessage);
 
-            if (IsASingleNumber(numbers))
-                return numbers.First();
+            var splitStrings = ExplodeInput(input, delimiters);
+            var numbers = ConvertStringsToIntArray(splitStrings);
+
+            foreach (var n in numbers)
+            {
+                if (n < 0)
+                    negatives.Add(n);
+
+                if (n < 1000)
+                    sum += n;
+            }
+
+            if (HasNegatives(negatives))
+                ThrowsNegativeException(negatives);
+            
 
             return sum; 
         }
 
-        private static Boolean NumberIsNotOver1000(Int32[] numbers, Int32 i)
+        private static bool HasNegatives(List<int> negatives)
         {
-            return numbers[i] <= 1000;
+            return negatives.Count > 0;
         }
 
-        private static Boolean IsANegativeNumber(Int32[] numbers, Int32 i)
+        private static void ThrowsNegativeException(List<int> negatives)
         {
-            return numbers[i] < 0;
+            var negativesExceptionMessage = "Negatives not allowed: " + String.Join(", ", negatives);
+            throw new NegativesNotAllowedException(negativesExceptionMessage);
         }
 
-        private static String[] ChangeDelimiter(String input, String[] delimiters)
+        private static String[] ExplodeInput(String input, List<String> delimiters)
         {
             if (HasANewDelimiter(input))
             {
@@ -62,39 +55,40 @@ namespace StringCalculatorKata
 
                 for (var i = 2; i < input.Length; i++)
                 {
-                    if (input[i] != '[')
+                    if (CouldBeADelimiter(input[i]))
                     {
                         if (IsTheNewDelimiter(input, i))
                             newDelimiter = input[i];
 
-                        if (IsAMultipleCharacterDelimiter(input, newDelimiter, i))
+                        if (IsAMultipleCharacterDelimiter(input[i], newDelimiter))
                             delimiterString += input[i];
                         else
-                            AddDelimiterToArray(ref delimiters, ref delimiterString);
+                        {
+                            delimiters.Add(delimiterString);
+                            delimiterString = String.Empty;
+                        }
                     }  
                 }
 
                 input = TrimInput(input, newDelimiter); 
             }
 
-            return input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+            return input.Split(delimiters.ToArray(), StringSplitOptions.RemoveEmptyEntries);
         }
 
-        private static void AddDelimiterToArray(ref String[] delimiters, ref String delimiterString)
+        private static Boolean CouldBeADelimiter(Char input)
         {
-            Array.Resize<String>(ref delimiters, delimiters.Length + 1);
-            delimiters[delimiters.Length - 1] = delimiterString;
-            delimiterString = String.Empty;
+            return input != '[';
         }
 
-        private static bool IsTheNewDelimiter(String input, Int32 i)
+        private static Boolean IsTheNewDelimiter(String input, Int32 i)
         {
             return i == 2 || input[i - 1] == '[';
         }
 
-        private static bool IsAMultipleCharacterDelimiter(String input, Char newDelimiter, Int32 i)
+        private static Boolean IsAMultipleCharacterDelimiter(Char input, Char newDelimiter)
         {
-            return input[i] == newDelimiter;
+            return input == newDelimiter;
         }
 
         private static String TrimInput(String input, Char newDelimiter)
@@ -104,24 +98,14 @@ namespace StringCalculatorKata
             return input;
         }
 
-        private static Boolean IsASingleNumber(Int32[] numbers)
-        {
-            return numbers.Count() == 1;
-        }
-
         private static Boolean HasANewDelimiter(String input)
         {
-            return input[0] == '/';
+            return input.StartsWith("/");
         }
 
         private static Int32[] ConvertStringsToIntArray(String[] strings)
         {
             return strings.Select(x => Int32.Parse(x)).ToArray();
-        }
-
-        private static Boolean IsEmptyString(String input)
-        {
-            return input.Trim() == String.Empty;
         }
     }
 }
