@@ -11,13 +11,11 @@ namespace StringCalculatorKata
             if (String.IsNullOrWhiteSpace(input))
                 return 0;
 
-            var delimiters = new List<String> { "\n", "," };
             var sum = 0;
             var negatives = new List<Int32>();
             
-
-            var splitStrings = ExplodeInput(input, delimiters);
-            var numbers = ConvertStringsToIntArray(splitStrings);
+            var splitStrings = ExplodeInput(input);
+            var numbers = splitStrings.Select(x => Convert.ToInt32(x));
 
             foreach (var n in numbers)
             {
@@ -28,26 +26,21 @@ namespace StringCalculatorKata
                     sum += n;
             }
 
-            if (HasNegatives(negatives))
+            if (negatives.Any())
                 ThrowsNegativeException(negatives);
             
-
             return sum; 
         }
 
-        private static bool HasNegatives(List<int> negatives)
-        {
-            return negatives.Count > 0;
-        }
-
-        private static void ThrowsNegativeException(List<int> negatives)
+        private static void ThrowsNegativeException(IEnumerable<Int32> negatives)
         {
             var negativesExceptionMessage = "Negatives not allowed: " + String.Join(", ", negatives);
             throw new NegativesNotAllowedException(negativesExceptionMessage);
         }
 
-        private static String[] ExplodeInput(String input, List<String> delimiters)
+        private static IEnumerable<String> ExplodeInput(String input)
         {
+            var delimiters = new List<String> { "\n", "," };
             if (HasANewDelimiter(input))
             {
                 var delimiterString = String.Empty;
@@ -100,12 +93,7 @@ namespace StringCalculatorKata
 
         private static Boolean HasANewDelimiter(String input)
         {
-            return input.StartsWith("/");
-        }
-
-        private static Int32[] ConvertStringsToIntArray(String[] strings)
-        {
-            return strings.Select(x => Int32.Parse(x)).ToArray();
+            return input.StartsWith("//");
         }
     }
 }
