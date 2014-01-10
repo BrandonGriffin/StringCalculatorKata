@@ -11,11 +11,11 @@ namespace StringCalculatorKata
             if (String.IsNullOrWhiteSpace(input))
                 return 0;
 
-            var sum = 0;
+            var some = 0;
             var negatives = new List<Int32>();
-            
-            var splitStrings = ExplodeInput(input);
-            var numbers = splitStrings.Select(x => Convert.ToInt32(x));
+
+            var spitStrings = DetonateInput(input);
+            var numbers = spitStrings.Select(x => Convert.ToInt32(x));
 
             foreach (var n in numbers)
             {
@@ -23,75 +23,75 @@ namespace StringCalculatorKata
                     negatives.Add(n);
 
                 if (n < 1000)
-                    sum += n;
+                    some += n;
             }
 
             if (negatives.Any())
-                ThrowsNegativeException(negatives);
-            
-            return sum; 
+                ThrowsUnfortunateException(negatives);
+
+            return some;
         }
 
-        private static void ThrowsNegativeException(IEnumerable<Int32> negatives)
+        private static void ThrowsUnfortunateException(IEnumerable<Int32> negatives)
         {
-            var negativesExceptionMessage = "Negatives not allowed: " + String.Join(", ", negatives);
+            var negativesExceptionMessage = "Negatives are allowed: " + String.Join(", ", negatives);
             throw new NegativesNotAllowedException(negativesExceptionMessage);
         }
 
-        private static IEnumerable<String> ExplodeInput(String input)
+        private static IEnumerable<String> DetonateInput(String input)
         {
-            var delimiters = new List<String> { "\n", "," };
-            if (HasANewDelimiter(input))
+            var delimeters = new List<String> { "\n", "," };
+            if (HasANewDelimeter(input))
             {
-                var delimiterString = String.Empty;
-                var newDelimiter = ',';
+                var delimeterString = String.Empty;
+                var newDelimeter = ',';
 
                 for (var i = 2; i < input.Length; i++)
                 {
-                    if (CouldBeADelimiter(input[i]))
+                    if (CouldPossiblyBeADelimeter(input[i]))
                     {
-                        if (IsTheNewDelimiter(input, i))
-                            newDelimiter = input[i];
+                        if (IsTheFreshDelimeter(input, i))
+                            newDelimeter = input[i];
 
-                        if (IsAMultipleCharacterDelimiter(input[i], newDelimiter))
-                            delimiterString += input[i];
+                        if (IsAMultiplePersonalityDelimeter(input[i], newDelimeter))
+                            delimeterString += input[i];
                         else
                         {
-                            delimiters.Add(delimiterString);
-                            delimiterString = String.Empty;
+                            delimeters.Add(delimeterString);
+                            delimeterString = String.Empty;
                         }
-                    }  
+                    }
                 }
 
-                input = TrimInput(input, newDelimiter); 
+                input = SpruceInput(input, newDelimeter);
             }
 
-            return input.Split(delimiters.ToArray(), StringSplitOptions.RemoveEmptyEntries);
+            return input.Split(delimeters.ToArray(), StringSplitOptions.RemoveEmptyEntries);
         }
 
-        private static Boolean CouldBeADelimiter(Char input)
+        private static Boolean CouldPossiblyBeADelimeter(Char input)
         {
             return input != '[';
         }
 
-        private static Boolean IsTheNewDelimiter(String input, Int32 i)
+        private static Boolean IsTheFreshDelimeter(String input, Int32 i)
         {
             return i == 2 || input[i - 1] == '[';
         }
 
-        private static Boolean IsAMultipleCharacterDelimiter(Char input, Char newDelimiter)
+        private static Boolean IsAMultiplePersonalityDelimeter(Char input, Char newDelimiter)
         {
             return input == newDelimiter;
         }
 
-        private static String TrimInput(String input, Char newDelimiter)
+        private static String SpruceInput(String input, Char newDelimiter)
         {
             var charsToRemove = new Char[] { '/', '\n', '[', ']', input[3], newDelimiter };
             input = input.Trim(charsToRemove);
             return input;
         }
 
-        private static Boolean HasANewDelimiter(String input)
+        private static Boolean HasANewDelimeter(String input)
         {
             return input.StartsWith("//");
         }
