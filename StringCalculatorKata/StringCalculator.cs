@@ -14,7 +14,7 @@ namespace StringCalculatorKata
             var sum = 0;
             var negatives = new List<Int32>();
             
-            var splitStrings = ExplodeInput(input);
+            var splitStrings = Explode(input);
             var numbers = splitStrings.Select(x => Convert.ToInt32(x));
 
             foreach (var n in numbers)
@@ -32,13 +32,13 @@ namespace StringCalculatorKata
             return sum; 
         }
 
-        private static void ThrowsNegativeException(IEnumerable<Int32> negatives)
+        private void ThrowsNegativeException(IEnumerable<Int32> negatives)
         {
             var negativesExceptionMessage = "Negatives not allowed: " + String.Join(", ", negatives);
             throw new NegativesNotAllowedException(negativesExceptionMessage);
         }
 
-        private static IEnumerable<String> ExplodeInput(String input)
+        private IEnumerable<String> Explode(String input)
         {
             var delimiters = new List<String> { "\n", "," };
             if (HasANewDelimiter(input))
@@ -56,10 +56,7 @@ namespace StringCalculatorKata
                         if (IsAMultipleCharacterDelimiter(input[i], newDelimiter))
                             delimiterString += input[i];
                         else
-                        {
-                            delimiters.Add(delimiterString);
-                            delimiterString = String.Empty;
-                        }
+                            delimiterString = AddNewDelimiter(delimiters, delimiterString);
                     }  
                 }
 
@@ -69,29 +66,36 @@ namespace StringCalculatorKata
             return input.Split(delimiters.ToArray(), StringSplitOptions.RemoveEmptyEntries);
         }
 
-        private static Boolean CouldBeADelimiter(Char input)
+        private String AddNewDelimiter(List<String> delimiters, String delimiterString)
+        {
+            delimiters.Add(delimiterString);
+            delimiterString = String.Empty;
+            return delimiterString;
+        }
+
+        private Boolean CouldBeADelimiter(Char input)
         {
             return input != '[';
         }
 
-        private static Boolean IsTheNewDelimiter(String input, Int32 i)
+        private Boolean IsTheNewDelimiter(String input, Int32 i)
         {
             return i == 2 || input[i - 1] == '[';
         }
 
-        private static Boolean IsAMultipleCharacterDelimiter(Char input, Char newDelimiter)
+        private Boolean IsAMultipleCharacterDelimiter(Char input, Char newDelimiter)
         {
             return input == newDelimiter;
         }
 
-        private static String TrimInput(String input, Char newDelimiter)
+        private String TrimInput(String input, Char newDelimiter)
         {
             var charsToRemove = new Char[] { '/', '\n', '[', ']', input[3], newDelimiter };
             input = input.Trim(charsToRemove);
             return input;
         }
 
-        private static Boolean HasANewDelimiter(String input)
+        private Boolean HasANewDelimiter(String input)
         {
             return input.StartsWith("//");
         }
